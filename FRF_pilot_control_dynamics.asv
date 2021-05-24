@@ -47,20 +47,19 @@ Seft = conj(e_dft(1:N)).*ft_dft(1:N)/N; % cross power spectral density of error 
 Suft = conj(u_dft(1:N)).*ft_dft(1:N)/N; %cross power spectral density of input and ft
 Sef =  abs(Seft);
 Suf =  abs(Suft);
-[pks,pklocs] = findpeaks(Sef);
-%Sef_pklocs = [9,18,37,56,72,99,139,188,261,308];
-%Suf_pklocs = [9,18,37,56,72,99,139,188,261,308];
+
+Sef_pklocs = [9,18,37,56,72,99,139,188,261,308];
+Suf_pklocs = [9,18,37,56,72,99,139,188,261,308];
 figure(3)
 
-loglog(omega,Sef(1:N/2),'k',omega(Sef_pklocs),Sef(Sef_pklocs),'ok')
+loglog(Freq,Sef(1:N/2),'k',Freq(Sef_pklocs),Sef(Sef_pklocs),'ok')
 
 legend('cpsd of e and ft','prominent peaks')
 xlabel('frequecy[Hz]')
 ylabel('|S_e_f_t(j \omega)|')
 grid on
 figure(4)
-loglog(omega,Suf(1:N/2),'k',omega(Sef_pklocs),Suf(Sef_pklocs),'ok')
-lsline
+loglog(Freq,Suf(1:N/2),'k',Freq(Sef_pklocs),Suf(Sef_pklocs),'ok')
 legend('cpsd of u and ft','prominent peaks')
 xlabel('frequecy[Hz]')
 ylabel('|S_u_f_t(j \omega)|')
@@ -75,8 +74,8 @@ figure(5)
 loglog(omega(Sef_pklocs),magh,'ok')
 xlabel(' \omega[rad/s]')
 ylabel('|H_p(j \omega)|')
-axis (10.^[-0.5 1.4 0.2 1.4]) 
+axis (10.^[-1.5 0.7 0 1.2]) 
 figure(6)
-semilogx(omega(Sef_pklocs),phaseh,'ok')
+semilogx(Freq(Sef_pklocs),phaseh,'ok')
 xlabel(' \omega[rad/s]')
 ylabel('\angle H_p(j \omega)')
