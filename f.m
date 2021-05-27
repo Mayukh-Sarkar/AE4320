@@ -1,3 +1,4 @@
-function y = f(constant,omega)
-y = constant(1)*(constant(2)*omega +1)*(constant(3)^2/(omega^2 + 2*constant(4)*constant(3)*omega+constant(3)^2));
+function y = f(C,omegaf)
+y = C(1).*omegaf.*exp(-omegaf*C(2))*C(3)^2./(omegaf.^2 + 2*C(4)*C(3).*omegaf+ C(3)^2);
+
 end

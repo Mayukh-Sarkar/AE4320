@@ -1,25 +1,22 @@
+clear;
+clc;
 load('ae4320_dataset1.mat')
+N = 2^13;
+t = t(1:N);
+ft = ft(end-N+1:end);
+error = identification.e;
+input = identification.u;
+error = error(end-N+1:end);
+input = input(end-N+1:end);
 %% excitation frequecny for FRF
 f_t = ft;
 dt = t(2) -t(1);
 N = length(t);
 Fs = 1/dt;
-freq = (Fs/N)*(1:N);% freq in HZ
-[ft_pks , pklocs] = findpeaks(f_t,"MinPeakProminence",0.3,"MinPeakHeight", 0.8);
-pklocs(end) = N(end);
-pklocs(3) =[];
-ft_pks(end) = f_t(end);
-ft_pks(3) =[];
+%freq = (Fs/N)*(1:N);% freq in HZ
+
 % Display results
-figure(1)
-plot(freq,f_t,'k')
-hold on
-scatter(freq(pklocs),ft_pks,'ok','filled')
-hold off
-grid on
-xlabel('frequency(Hz)')
-ylabel('f_t')
-legend('f_t','excitation frequecy')
+
 
 % [fd_pks, fd_pklocs] = findpeaks(fd);
 % figure(2)
@@ -34,8 +31,6 @@ legend('f_t','excitation frequecy')
 % axis tight
 
 %% Estimate of cross psd
-error = identification.e;
-input = identification.u;
 
 Freq = (Fs/N)*(1:N/2);
 omega = 2*pi*Freq;
@@ -43,40 +38,20 @@ omega = 2*pi*Freq;
 e_dft = fft(error,N); % Fourier transform of the error signal at excitation freq
 u_dft = fft(input,N); % Fourier transform of the input signal at excitation freq
 ft_dft = fft(ft,N);  % Fourier transform of the forcing function
+[ft_pks , pklocs] = findpeaks(abs(ft_dft(1:N/2)),"MinPeakProminence",0.3,"MinPeakHeight", 0.8);
+
 Seft = conj(e_dft(1:N)).*ft_dft(1:N)/N; % cross power spectral density of error and ft
 Suft = conj(u_dft(1:N)).*ft_dft(1:N)/N; %cross power spectral density of input and ft
 Sef =  abs(Seft);
 Suf =  abs(Suft);
-[pks,pklocs] = findpeaks(Sef);
-%Sef_pklocs = [9,18,37,56,72,99,139,188,261,308];
-%Suf_pklocs = [9,18,37,56,72,99,139,188,261,308];
-figure(3)
 
-loglog(omega,Sef(1:N/2),'k',omega(Sef_pklocs),Sef(Sef_pklocs),'ok')
-
-legend('cpsd of e and ft','prominent peaks')
-xlabel('frequecy[Hz]')
-ylabel('|S_e_f_t(j \omega)|')
-grid on
-figure(4)
-loglog(omega,Suf(1:N/2),'k',omega(Sef_pklocs),Suf(Sef_pklocs),'ok')
-lsline
-legend('cpsd of u and ft','prominent peaks')
-xlabel('frequecy[Hz]')
-ylabel('|S_u_f_t(j \omega)|')
-grid on
 
 
 %% Pilot dynamics
-Hp = Suft./Seft; %pilot dynamics at excitation freq
-magh = abs(Hp(Sef_pklocs)); % magnitude of Hp
-phaseh = 180*angle(Hp(Sef_pklocs))/pi; % phase of hp
-figure(5)
-loglog(omega(Sef_pklocs),magh,'ok')
-xlabel(' \omega[rad/s]')
-ylabel('|H_p(j \omega)|')
-axis (10.^[-0.5 1.4 0.2 1.4]) 
-figure(6)
-semilogx(omega(Sef_pklocs),phaseh,'ok')
-xlabel(' \omega[rad/s]')
-ylabel('\angle H_p(j \omega)')
+omegaf = omega(pklocs)';
+Hp = Suft(pklocs)./Seft(pklocs); %pilot dynamics at excitation freq
+magh = abs(Hp); % magnitude of Hp
+phaseh = 180*angle(Hp)/pi; % phase of hp
+
+
+
