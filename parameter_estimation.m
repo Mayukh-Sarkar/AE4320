@@ -1,13 +1,16 @@
+%%%% Specify function for optimization
+
+% N_runs = 5 ;
 N_participants = 1 ;
 N_parameters = 5 ;
 N_runs = 1 ;
-human_par_M_Kp = zeros(1,1) ;
-human_par_M_TL = zeros(1,1) ;
-human_par_M_tau_p = zeros(1,1) ;
-human_par_M_zeta_nm = zeros(1,1) ;
-human_par_M_omega_nm = zeros(1,1) ;
+human_par_M_Kp = zeros(N_runs,N_participants) ;
+human_par_M_TL = zeros(N_runs,N_participants) ;
+human_par_M_tau_p = zeros(N_runs,N_participants) ;
+human_par_M_zeta_nm = zeros(N_runs,N_participants) ;
+human_par_M_omega_nm = zeros(N_runs,N_participants) ;
 omega = omegaf ;
-omega_test = logspace(-1, 1.5, 200) ;
+omega_test = logspace(-1, 1.5, 100) ;
 options = struct('MaxFunEvals', 15000,'MaxIter', 15000);
 
 data_mag1 = zeros(N_runs, length(omega)) ;
@@ -23,23 +26,25 @@ for i = 1 : N_runs
 
 
     for m = 1 : N_participants
-        H_pe = zeros(length(omega),1) ; 
-        fun = @(x) 0 ;
+        H_pe = zeros(length(omegaf),1) ; 
+        %fun = @(x) 0 ;
 
         Phase = phase_M_1;
         Mag = mag_M_1;
-        for k = 1 : length(omega)
-            H_pe(k) = Mag(k);
-            g = @(x) (abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omega(k))) * exp(-1j*omega(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omega(k) + (1j*omega(k))^2))))^2;
+        for k = 1 : length(omegaf)
+            H_pe(k) = Mag(k) * (cos(Phase(k)*pi/180) + 1j * sin(Phase(k)*pi/180)) ;
+            g = @(x) (abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))))^2;
             %fun = @(x) fun(x) + g(x) ;
             data_mag1(i,k) = Mag(k) ;
             data_phase1(i,k) = Phase(k) ;
         end
 
-        x0 = [0,0,0,0,0] ;
+        x0 = [3, 1, 0.35, 0.5, 15] ;
+        %[x,fval,exitflag,output] = fminsearch(g, x0, options);
+        %x = fminsearch(g,x0,options);
         lb = [0, 0, 0, 0, 5];
         ub = [100, 10, 10, 1, 30];
-        x = fmincon(g,x0,[],[],[],[],[],[],[],options);
+        x = fmincon(g,x0,[],[],[],[],lb,ub,[],options);
 
         human_par_M_Kp(i,m) = x(1) ;
         human_par_M_TL(i,m) = x(2) ;
@@ -83,7 +88,6 @@ for i = 1 : N_runs
             data_phase2(i,l) = phase_out(l) ;
         end
         
-
     end
 end
 
@@ -95,17 +99,31 @@ subplot(2,1,1)
 loglog(omega, data_mag1(1,:),'ok')
 hold on
 loglog(omega_test, data_mag2(1,:),'-k')
+% hold on
+% plot(omega, data_mag1(60,:),'*k')
+% hold on
+% loglog(omega_test, data_mag2(60,:),'--k')
 hold off
 axis(10.^[-1 1.5 -1 2])
 xlabel("\omega [rad/s]")
 ylabel("|H_{p} (j \omega)| [-]")
 ah=gca; 
 set(ah,'Fontsize',12)
+% legend('Test data run 1','Test data run 60','Model run 1','Model run 60','Location','southomegafest')
+
 subplot(2,1,2)
 semilogx(omega, data_phase1(1,:),'ok')
 hold on
 semilogx(omega_test, data_phase2(1,:),'-k')
+% hold on
+% semilogx(omega, data_phase1(60,:),'*k')
+% hold on
+% semilogx(omega_test, data_phase2(60,:),'--k')
 hold off
 axis([10.^-1 10.^1.5 -360 180])
 xlabel("\omega [rad/s]")
 ylabel("\angle H_{p} (j \omega) [deg]")
+%legend('Test data run 1','Test data run 60','Model run 1','Model run 60','Location','southomegafest')
+ah=gca; 
+set(ah,'Fontsize',12)
+% sgtitle(title)
