@@ -1,56 +1,36 @@
-%%%% Specify function for optimization
-
-% N_runs = 5 ;
-N_participants = 1 ;
-N_parameters = 5 ;
-N_runs = 1 ;
-human_par_M_Kp = zeros(N_runs,N_participants) ;
-human_par_M_TL = zeros(N_runs,N_participants) ;
-human_par_M_tau_p = zeros(N_runs,N_participants) ;
-human_par_M_zeta_nm = zeros(N_runs,N_participants) ;
-human_par_M_omega_nm = zeros(N_runs,N_participants) ;
-omega = omegaf ;
-omega_test = logspace(-1, 1.5, 100) ;
-options = struct('MaxFunEvals', 15000,'MaxIter', 15000);
-
-data_mag1 = zeros(N_runs, length(omega)) ;
-data_phase1 = zeros(N_runs, length(omega)) ;
-data_mag2 = zeros(N_runs, length(omega_test)) ;
-data_phase2 = zeros(N_runs, length(omega_test)) ;
-
-
+for i = 1 : N_runs
     phase_M_1 = phaseh ;
 
 
     mag_M_1 = magh ;
 
 
-    
+    for m = 1 : N_participants
         H_pe = zeros(length(omegaf),1) ; 
-        %fun = @(x) 0 ;
+        fun = @(z) 0 ;
 
         Phase = phase_M_1;
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
-            g = @(x) (abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))))^2;
-            %fun = @(x) fun(x) + g(x) ;
-            data_mag1(1,k) = Mag(k) ;
-            data_phase1(1,k) = Phase(k) ;
+            g = @(z) (abs(H_pe(k) - z(1)*(1 + z(2)*(1j*omegaf(k))) /(1+z(3)*(1j*omegaf(k)))* exp(-1j*omegaf(k)*z(4)) * (z(6)^2/(z(6)^2 + 2*z(5)*z(6)*1j*omegaf(k) + (1j*omegaf(k))^2))))^2;
+            data_magC(i,k) = Mag(k) ;
+            data_phaseC(i,k) = Phase(k) ;
         end
 
-        x0 = [3, 1, 0.35, 0.5, 15] ;
+        z0 = [2.5,0.7,0.4,0.2,1,15] ;
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
         %x = fminsearch(g,x0,options);
-        lb = [0, 0, 0, 0, 5];
-        ub = [100, 10, 10, 1, 30];
-        x = fmincon(g,x0,[],[],[],[],lb,ub,[],options);
+        lb = [0, 0, 0, 0,0, 5];
+        ub = [100, 10, 10,10, 1, 30];
+        z = fmincon(fun,x0,[],[],[],[],lb,ub,[],options);
 
-        human_par_M_Kp = x(1) ;
-        human_par_M_TL = x(2) ;
-        human_par_M_tau_p = x(3) ;
-        human_par_M_zeta_nm = x(4) ;
-        human_par_M_omega_nm = x(5) ;
+        Kp(i,m) = z(1) ;
+        TL(i,m) = z(2) ;
+       Ti(i,m) = z(3) ;
+        tau_p(i,m) = z(4) ;
+        zeta(i,m) = z(5) ;
+        omega(i,m) = z(6) ;
 
         phase_out = zeros(length(omega_test),1) ;
         mag_out = zeros(length(omega_test),1) ;
@@ -60,7 +40,7 @@ data_phase2 = zeros(N_runs, length(omega_test)) ;
         get_iii = 100000 ;
         count = 0 ;
         for l = 1:length(omega_test)
-            Hpe_model = x(1)*(1 + x(2)*(1j*omega_test(l))) * exp(-1j*omega_test(l)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omega_test(l) + (1j*omega_test(l))^2));
+            Hpe_model = z(1)*(1 + z(2)*(1j*omega_test(l)))/(1+z(3)*(1j*omega_test(k))) * exp(-1j*omega_test(l)*z(4)) * (z(6)^2/(z(6)^2 + 2*z(6)*z(5)*1j*omega_test(l) + (1j*omega_test(l))^2));
             mag_out(l) = abs(Hpe_model) ;
             phase_out(l) = angle(Hpe_model)*180/pi ;
             if (phase_out(l) < -150) && (count == 0)
@@ -84,18 +64,21 @@ data_phase2 = zeros(N_runs, length(omega_test)) ;
 %             if (l >= get_iii) && (phase_out(l) > -880)
 %                 phase_out(l) = phase_out(l) - 360 ;
 %             end
-            data_mag2(1,l) = mag_out(l) ;
-            data_phase2(1,l) = phase_out(l) ;
+            data_magC(i,l) = mag_out(l) ;
+            data_phaseC(i,l) = phase_out(l) ;
         end
+        
+    end
+end
 
 %% Bode plots M
 % title = "Bode plot for run 1 and 60 from participant 1 in Moving simulator" ;
 figure(1)
 set(gcf, 'Position', [100 100 700 650])
 subplot(2,1,1)
-loglog(omega, data_mag1(1,:),'ok')
+loglog(omega, magh,'ok')
 hold on
-loglog(omega_test, data_mag2(1,:),'-k')
+loglog(omega_test, data_magC(1,:),'-k')
 % hold on
 % plot(omega, data_mag1(60,:),'*k')
 % hold on
@@ -109,9 +92,9 @@ set(ah,'Fontsize',12)
 % legend('Test data run 1','Test data run 60','Model run 1','Model run 60','Location','southomegafest')
 
 subplot(2,1,2)
-semilogx(omega, data_phase1(1,:),'ok')
+semilogx(omega, phaseh,'ok')
 hold on
-semilogx(omega_test, data_phase2(1,:),'-k')
+semilogx(omega_test, data_phaseC(1,:),'-k')
 % hold on
 % semilogx(omega, data_phase1(60,:),'*k')
 % hold on
