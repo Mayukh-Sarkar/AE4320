@@ -1,6 +1,6 @@
 parameters = {'kp';'Tl';'Ti';'Tp';'zeta';'omega'};
-A = [Kp_A;0;0;tau_A;zeta_A;omega_A];
+A = [y(1);0;0;y(2);y(3);y(4)];
 B = [x(1);x(2);0;x(3);x(4);x(5)];
-C = [Kp_C;TL_C;TI_C;tau_C;zeta_C;omega_C];
+C = [z(1);z(2);z(3);z(4);z(5);z(6)];
 T = table(A,B,C,'RowNames',parameters);
 disp(T)

@@ -10,12 +10,12 @@ human_par_M_Ti = zeros(N_runs,N_participants) ;
 human_par_M_tau_p = zeros(N_runs,N_participants) ;
 human_par_M_zeta_nm = zeros(N_runs,N_participants) ;
 human_par_M_omega_nm = zeros(N_runs,N_participants) ;
-omega = omegaf ;
+omegaf = omegaf ;
 omega_test = logspace(-1, 1.5, 100) ;
 options = struct('MaxFunEvals', 15000,'MaxIter', 15000);
 
-data_mag1 = zeros(N_runs, length(omega)) ;
-data_phase1 = zeros(N_runs, length(omega)) ;
+data_mag1 = zeros(N_runs, length(omegaf)) ;
+data_phase1 = zeros(N_runs, length(omegaf)) ;
 data_mag2 = zeros(N_runs, length(omega_test)) ;
 data_phase2 = zeros(N_runs, length(omega_test)) ;
 
@@ -97,7 +97,7 @@ end
 figure(1)
 set(gcf, 'Position', [100 100 700 650])
 subplot(2,1,1)
-loglog(omega, data_mag1(1,:),'ok')
+loglog(omegaf, data_mag1(1,:),'ok')
 hold on
 loglog(omega_test, data_mag2(1,:),'-k')
 % hold on
@@ -113,7 +113,7 @@ set(ah,'Fontsize',12)
 % legend('Test data run 1','Test data run 60','Model run 1','Model run 60','Location','southomegafest')
 
 subplot(2,1,2)
-semilogx(omega, data_phase1(1,:),'ok')
+semilogx(omegaf, data_phase1(1,:),'ok')
 hold on
 semilogx(omega_test, data_phase2(1,:),'-k')
 % hold on

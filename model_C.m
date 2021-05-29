@@ -1,11 +1,11 @@
-for i = 1 : N_runs
+for i = 1 : 1
     phase_M_1 = phaseh ;
 
 
     mag_M_1 = magh ;
 
 
-    for m = 1 : N_participants
+    for m = 1 : 1
         H_pe = zeros(length(omegaf),1) ; 
         fun = @(z) 0 ;
 
@@ -23,14 +23,14 @@ for i = 1 : N_runs
         %x = fminsearch(g,x0,options);
         lb = [0, 0, 0, 0,0, 5];
         ub = [100, 10, 10,10, 1, 30];
-        z = fmincon(fun,x0,[],[],[],[],lb,ub,[],options);
+        z = fmincon(fun,z0,[],[],[],[],lb,ub,[],options);
 
-        Kp(i,m) = z(1) ;
-        TL(i,m) = z(2) ;
-       Ti(i,m) = z(3) ;
-        tau_p(i,m) = z(4) ;
-        zeta(i,m) = z(5) ;
-        omega(i,m) = z(6) ;
+        Kp_C(i,m) = z(1) ;
+        TL_C(i,m) = z(2) ;
+       Ti_C(i,m) = z(3) ;
+        tau_C(i,m) = z(4) ;
+        zeta_C(i,m) = z(5) ;
+        omega_C(i,m) = z(6) ;
 
         phase_out = zeros(length(omega_test),1) ;
         mag_out = zeros(length(omega_test),1) ;
@@ -71,39 +71,4 @@ for i = 1 : N_runs
     end
 end
 
-%% Bode plots M
-% title = "Bode plot for run 1 and 60 from participant 1 in Moving simulator" ;
-figure(1)
-set(gcf, 'Position', [100 100 700 650])
-subplot(2,1,1)
-loglog(omega, magh,'ok')
-hold on
-loglog(omega_test, data_magC(1,:),'-k')
-% hold on
-% plot(omega, data_mag1(60,:),'*k')
-% hold on
-% loglog(omega_test, data_mag2(60,:),'--k')
-hold off
-axis(10.^[-1 1.5 -1 2])
-xlabel("\omega [rad/s]")
-ylabel("|H_{p} (j \omega)| [-]")
-ah=gca; 
-set(ah,'Fontsize',12)
-% legend('Test data run 1','Test data run 60','Model run 1','Model run 60','Location','southomegafest')
 
-subplot(2,1,2)
-semilogx(omega, phaseh,'ok')
-hold on
-semilogx(omega_test, data_phaseC(1,:),'-k')
-% hold on
-% semilogx(omega, data_phase1(60,:),'*k')
-% hold on
-% semilogx(omega_test, data_phase2(60,:),'--k')
-hold off
-axis([10.^-1 10.^1.5 -360 180])
-xlabel("\omega [rad/s]")
-ylabel("\angle H_{p} (j \omega) [deg]")
-%legend('Test data run 1','Test data run 60','Model run 1','Model run 60','Location','southomegafest')
-ah=gca; 
-set(ah,'Fontsize',12)
-% sgtitle(title)

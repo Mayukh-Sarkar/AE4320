@@ -44,10 +44,10 @@ for i = 1 : 1
         x = fmincon(fun,x0,[],[],[],[],lb,ub,[],options);
 
         Kp_B(i,m) = x(1) ;
-        TL_A(i,m) = x(2) ;
-        Tp_A(i,m) = x(3) ;
-        zeta_A(i,m) = x(4) ;
-        omega_A(i,m) = x(5) ;
+        TL_B(i,m) = x(2) ;
+        Tp_B(i,m) = x(3) ;
+        zeta_B(i,m) = x(4) ;
+        omega_B(i,m) = x(5) ;
 
         phase_out = zeros(length(omega_test),1) ;
         mag_out = zeros(length(omega_test),1) ;
@@ -88,39 +88,4 @@ for i = 1 : 1
     end
 end
 
-%% Bode plots M
-% title = "Bode plot for run 1 and 60 from participant 1 in Moving simulator" ;
-figure(1)
-set(gcf, 'Position', [100 100 700 650])
-subplot(2,1,1)
-loglog(omegaf,magh,'ok')
-hold on
-loglog(omega_test, data_magB(1,:),'-k')
-% hold on
-% plot(omega, data_mag1(60,:),'*k')
-% hold on
-% loglog(omega_test, data_mag2(60,:),'--k')
-hold off
-axis(10.^[-0.5 1.3 -1 2])
-xlabel("\omega [rad/s]")
-ylabel("|H_{p} (j \omega)| [-]")
-ah=gca; 
-set(ah,'Fontsize',12)
-% legend('Test data run 1','Test data run 60','Model run 1','Model run 60','Location','southomegafest')
 
-subplot(2,1,2)
-semilogx(omegaf,phaseh,'ok')
-hold on
-semilogx(omega_test, data_phaseB(1,:),'-k')
-% hold on
-% semilogx(omega, data_phase1(60,:),'*k')
-% hold on
-% semilogx(omega_test, data_phase2(60,:),'--k')
-hold off
-axis([10.^-0.5 10.^1.3 -180 180])
-xlabel("\omega [rad/s]")
-ylabel("\angle H_{p} (j \omega) [deg]")
-%legend('Test data run 1','Test data run 60','Model run 1','Model run 60','Location','southomegafest')
-ah=gca; 
-set(ah,'Fontsize',12)
-% sgtitle(title)
