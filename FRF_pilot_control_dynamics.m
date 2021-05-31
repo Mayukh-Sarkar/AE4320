@@ -53,6 +53,5 @@ Hp = Suft(pklocs)./Seft(pklocs); %pilot dynamics at excitation freq
 magh = abs(Hp); % magnitude of Hp
 phaseh = 180*angle(Hp)/pi; % phase of hp
 
-figure(4)
-loglog(omega,Suf(1:N/2),'k',omega(pklocs),Suf(pklocs),'ok')
+
 

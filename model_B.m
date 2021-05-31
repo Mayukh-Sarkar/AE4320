@@ -34,14 +34,18 @@ for i = 1 : 1
             data_phase1(i,k) = Phase(k) ;
         end
 
-        %x0 = [3,0.35,0.5,1,15] ;
-        x0 = [2.5,0.4,0.1,1,15];
-        %x0=[1.5,0.3,0.1,1,10];
+        %x0 = [2.5,0.35,0.5,0.5,15] ;   % 3.0561e-12
+        %x0 = [3,0.35,0.5,0.5,20] ;   % 4.7264e-11
+        x0 = [3,0.35,0.2,0.4,17] ;    %
+        %x0 = [2.5,0.4,0.1,1,15];
+        %x0 = [3,0.4,0.1,1,10]; % better fit trail & error
+        %x0=[3.5,0.3,0.1,1,15];
+        %x0 = [0,0,0,0,0];
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
-        %x = fminsearch(g,x0,options);
-        lb = [0, 0, 0, 0, 5];
-        ub = [100, 10, 10, 1, 30];
-        x = fmincon(fun,x0,[],[],[],[],lb,ub,[],options);
+        x = fminsearch(g,x0,options);
+        %lb = [0, 0, 0, 0, 5];
+        %ub = [100, 10, 10, 1, 30];
+        %x = fmincon(fun,x0,[],[],[],[],lb,ub,[],options);
 
         Kp_B(i,m) = x(1) ;
         TL_B(i,m) = x(2) ;
