@@ -1,6 +1,6 @@
 %%%% Specify function for optimization
 
-omega_test = logspace(-0.5, 1.5, 100);
+omega_test = logspace(-0.4, 1.3, 100);
 
 options = struct('MaxFunEvals', 15000,'MaxIter', 15000);
 
@@ -29,14 +29,14 @@ for i = 1 : 1
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
-            g = @(x) (abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))))^2;
+            g = @(x) (abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
             data_mag1(i,k) = Mag(k) ;
             data_phase1(i,k) = Phase(k) ;
         end
 
         %x0 = [2.5,0.35,0.5,0.5,15] ;   % 3.0561e-12
-        %x0 = [3,0.35,0.5,0.5,20] ;   % 4.7264e-11
-        x0 = [3,0.35,0.2,0.4,17] ;    %
+        x0 = [2.7,0.3,0.2,0.2,10] ;   % 4.7264e-11
+        %x0 = [3,0.35,0.2,0.4,17] ;    %
         %x0 = [2.5,0.4,0.1,1,15];
         %x0 = [3,0.4,0.1,1,10]; % better fit trail & error
         %x0=[3.5,0.3,0.1,1,15];
@@ -78,13 +78,13 @@ for i = 1 : 1
             if (l >= get_ii) && (phase_out(l) > -480)
                 phase_out(l) = phase_out(l) - 360 ;
             end
-%             if (phase_out(l) < -880) && (count == 2)
-%                 get_iii = l ;
-%                 count = 3 ;
-%             end
-%             if (l >= get_iii) && (phase_out(l) > -880)
-%                 phase_out(l) = phase_out(l) - 360 ;
-%             end
+            if (phase_out(l) < -880) && (count == 2)
+                get_iii = l ;
+                count = 3 ;
+            end
+            if (l >= get_iii) && (phase_out(l) > -880)
+                phase_out(l) = phase_out(l) - 360 ;
+            end
             data_magB(i,l) = mag_out(l) ;
             data_phaseB(i,l) = phase_out(l) ;
         end

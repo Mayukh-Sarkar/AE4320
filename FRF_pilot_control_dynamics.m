@@ -38,7 +38,7 @@ omega = 2*pi*Freq;
 e_dft = fft(error,N); % Fourier transform of the error signal at excitation freq
 u_dft = fft(input,N); % Fourier transform of the input signal at excitation freq
 ft_dft = fft(ft,N);  % Fourier transform of the forcing function
-[ft_pks , pklocs] = findpeaks(abs(ft_dft(1:N/2)),"MinPeakProminence",0.3,"MinPeakHeight", 0.8);
+[ft_pks , pklocs] = findpeaks(abs(ft_dft(1:N/2)),"MinPeakHeight", 0.1);
 
 Seft = conj(e_dft(1:N)).*ft_dft(1:N)/N; % cross power spectral density of error and ft
 Suft = conj(u_dft(1:N)).*ft_dft(1:N)/N; %cross power spectral density of input and ft
