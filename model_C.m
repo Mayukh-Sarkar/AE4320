@@ -13,15 +13,15 @@ for i = 1 : 1
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
-            f = @(z) (abs(H_pe(k) - z(1)*(1 + z(2)*(1j*omegaf(k))) /(1+z(3)*(1j*omegaf(k)))* exp(-1j*omegaf(k)*z(4)) * (z(6)^2/(z(6)^2 + 2*z(5)*z(6)*1j*omegaf(k) + (1j*omegaf(k))^2))));
+            f = @(z) sum(abs(H_pe(k) - z(1)*(1 + z(2)*(1j*omegaf(k))) /(1+z(3)*(1j*omegaf(k)))* exp(-1j*omegaf(k)*z(4)) * (z(6)^2/(z(6)^2 + 2*z(5)*z(6)*1j*omegaf(k) + (1j*omegaf(k))^2))));
             data_magC(i,k) = Mag(k) ;
             data_phaseC(i,k) = Phase(k) ;
         end
         
-        %z0 = [2.5,0.35,0.1,0.2,0.5,15] ; % cost 3.0141e-10
-        %z0 = [3,0.35,0.1,0.2,1,15] ; %cost power -9
-        z0 = [2,0.7,0.4,0.2,0.5,10] ;  %cost 3.9903e-10
-        %z0 = [2,0.7,0.3,0.2,0.5,10] ; %power in power -8
+        %z0 = [2.5,0.35,0.1,0.2,0.5,15] ; 
+        %z0 = [3,0.35,0.1,0.2,1,15] ; %1.99765e^05
+        z0 = [2,0.7,0.4,0.2,0.5,10] ;  
+        %z0 = [2,0.7,0.3,0.2,0.5,10] ; 
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
         z = fminsearch(f,z0,options);
         %z0 = [0,0,0,0,0,0];
@@ -75,4 +75,4 @@ for i = 1 : 1
     end
 end
 
-
+modelC =  sum(abs(H_pe(k) - z(1)*(1 + z(2)*(1j*omegaf(k))) /(1+z(3)*(1j*omegaf(k)))* exp(-1j*omegaf(k)*z(4)) * (z(6)^2/(z(6)^2 + 2*z(5)*z(6)*1j*omegaf(k) + (1j*omegaf(k))^2))));

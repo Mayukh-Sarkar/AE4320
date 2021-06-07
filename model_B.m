@@ -29,16 +29,16 @@ for i = 1 : 1
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
-            g = @(x) (abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
+            g = @(x) sum(abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
             data_mag1(i,k) = Mag(k) ;
             data_phase1(i,k) = Phase(k) ;
         end
 
-        %x0 = [2.5,0.35,0.5,0.5,15] ;   % 3.0561e-12
-        x0 = [2.7,0.3,0.2,0.2,10] ;   % 4.7264e-11
-        %x0 = [3,0.35,0.2,0.4,17] ;    %
+        %x0 = [2.5,0.35,0.5,0.5,15] ;   
+        x0 = [2.7,0.3,0.2,0.2,10] ;   % 4.3065e-05
+        %x0 = [3,0.35,0.2,0.4,17] ;    
         %x0 = [2.5,0.4,0.1,1,15];
-        %x0 = [3,0.4,0.1,1,10]; % better fit trail & error
+        %x0 = [3,0.4,0.1,1,10]; 
         %x0=[3.5,0.3,0.1,1,15];
         %x0 = [0,0,0,0,0];
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
@@ -92,4 +92,4 @@ for i = 1 : 1
     end
 end
 
-
+modelB = sum(abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));

@@ -29,18 +29,11 @@ for i = 1 : 1
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
-            g = @(w) (abs(H_pe(k) - w(1)*(1 +w(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
-            data_mag1(i,k) = Mag(k) ;
+            g = @(w) sum(abs(H_pe(k) - w(1)*1/(1 + w(2)*(1j*omega_test(l))) * exp(-1j*omegaf(k)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
             data_phase1(i,k) = Phase(k) ;
         end
-
-        %x0 = [2.5,0.35,0.5,0.5,15] ;   % 3.0561e-12
-        %x0 = [3,0.35,0.5,0.5,20] ;   % 4.7264e-11
-        w0 = [3,0.35,0.2,0.4,17] ;    %
-        %x0 = [2.5,0.4,0.1,1,15];
-        %x0 = [3,0.4,0.1,1,10]; % better fit trail & error
-        %x0=[3.5,0.3,0.1,1,15];
-        %x0 = [0,0,0,0,0];
+        %w0 =  [2,0.7,0.4,0.2,0.5,10]   ;  
+        w0 =  [1.5,0.4,0.2,0.2,10]   ; 
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
         w = fminsearch(g,w0,options);
         %lb = [0, 0, 0, 0, 5];
@@ -48,7 +41,8 @@ for i = 1 : 1
         %x = fmincon(fun,x0,[],[],[],[],lb,ub,[],options);
 
         Kp_B(i,m) = w(1) ;
-        TL_B(i,m) = w(2) ;
+        %TL_B(i,m) = w(2) ;
+        Ti_D(i,m) = w(2);
         Tp_B(i,m) = w(3) ;
         zeta_B(i,m) = w(4) ;
         omega_B(i,m) = w(5) ;
@@ -61,7 +55,7 @@ for i = 1 : 1
         get_iii = 100000 ;
         count = 0 ;
         for l = 1:length(omega_test)
-            Hpe_model = w(1)*(1 + w(2)*(1j*omega_test(l)))^2 * exp(-1j*omega_test(l)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omega_test(l) + (1j*omega_test(l))^2));
+            Hpe_model = w(1)*1/(1 + w(2)*(1j*omega_test(l))) * exp(-1j*omega_test(l)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omega_test(l) + (1j*omega_test(l))^2));
             mag_out(l) = abs(Hpe_model) ;
             phase_out(l) = angle(Hpe_model)*180/pi ;
             if (phase_out(l) < -150) && (count == 0)
@@ -92,4 +86,5 @@ for i = 1 : 1
     end
 end
 
+modelD = sum(abs(H_pe(k) - w(1)*1/(1 + w(2)*(1j*omega_test(l))) * exp(-1j*omegaf(k)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
 

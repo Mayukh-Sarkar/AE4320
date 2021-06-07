@@ -13,13 +13,13 @@ for i = 1 : 1
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
-            h = @(y) (abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
+            h = @(y) sum(abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
             data_mag1(i,k) = Mag(k) ;
             data_phase1(i,k) = Phase(k) ;
         end
 
        % y0 = [2,0.35,0.5,1,15] ;
-       y0 = [2.5,0.25,0.2,15]; %cost    2.0166e-09
+       y0 = [2.5,0.25,0.2,15]; %4.0658e-05
         %y0 = [0,0,0,0];
         %y0=[1.5,0.3,0.1,1,10];
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
@@ -72,4 +72,5 @@ for i = 1 : 1
         
     end
 end
+modelA = sum(abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
 
