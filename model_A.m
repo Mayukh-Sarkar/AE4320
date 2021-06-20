@@ -3,16 +3,22 @@ for i = 1 : 1
 
 
     mag_M_1 = magh ;
+    
+   
 
 
     for m = 1 : 1
         H_pe = zeros(length(omegaf),1) ; 
+        
         %fun = @(y) 0 ;
 
         Phase = phase_M_1;
         Mag = mag_M_1;
+    
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
+            
+            
             h = @(y) sum(abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
             data_mag1(i,k) = Mag(k) ;
             data_phase1(i,k) = Phase(k) ;
@@ -33,6 +39,7 @@ for i = 1 : 1
         Tp_A(i,m) = y(2) ;
         zeta_A(i,m) = y(3) ;
         omega_A(i,m) = y(4) ;
+
 
         phase_out = zeros(length(omega_test),1) ;
         mag_out = zeros(length(omega_test),1) ;
@@ -72,5 +79,5 @@ for i = 1 : 1
         
     end
 end
-modelA = sum(abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
+modelA = (abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
 
