@@ -29,13 +29,13 @@ for i = 1 : 1
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
-            g = @(w) sum(abs(H_pe(k) - w(1)*1/(1 + w(2)*(1j*omega_test(l))) * exp(-1j*omegaf(k)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
+            g = @(w) sum(abs(H_pe(k) - w(1)*1/(1 + w(2)*(1j*omega_test(l))) * exp(-1j*omegaf(k)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omegaf(k) + (1j*omegaf(k))^2)))^2);
             data_phase1(i,k) = Phase(k) ;
         end
         %w0 =  [2,0.7,0.4,0.2,0.5,10]   ;  
         w0 =  [1.5,0.4,0.2,0.2,10]   ; 
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
-        w = fminsearch(g,w0,options);
+        [w,fvalD] = fminsearch(g,w0,options);
         %lb = [0, 0, 0, 0, 5];
         %ub = [100, 10, 10, 1, 30];
         %x = fmincon(fun,x0,[],[],[],[],lb,ub,[],options);
@@ -86,5 +86,5 @@ for i = 1 : 1
     end
 end
 
-modelD = sum(abs(H_pe(k) - w(1)*1/(1 + w(2)*(1j*omega_test(l))) * exp(-1j*omegaf(k)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
-
+%modelD = sum(abs(H_pe(k) - w(1)*1/(1 + w(2)*(1j*omega_test(l))) * exp(-1j*omegaf(k)*w(3)) * (w(5)^2/(w(5)^2 + 2*w(4)*w(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
+modelD =fvalD;

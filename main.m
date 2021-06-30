@@ -7,4 +7,4 @@ model_D
 model_t
 
 val
-%plots
+plots

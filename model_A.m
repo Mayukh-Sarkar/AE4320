@@ -19,7 +19,7 @@ for i = 1 : 1
             H_pe(k) = Mag(k) ;
             
             
-            h = @(y) sum(abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
+            h = @(y) sum(abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2)))^2);
             data_mag1(i,k) = Mag(k) ;
             data_phase1(i,k) = Phase(k) ;
         end
@@ -29,7 +29,7 @@ for i = 1 : 1
         %y0 = [0,0,0,0];
         %y0=[1.5,0.3,0.1,1,10];
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
-        y = fminsearch(h,y0,options);
+        [y,fvalA] = fminsearch(h,y0,options);
         %lb = [0, 0, 0, 5];
         %ub = [100, 10, 1, 30];
         %y = fmincon(h,y0,[],[],[],[],lb,ub,[],options);
@@ -79,5 +79,6 @@ for i = 1 : 1
         
     end
 end
-modelA = (abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
+%modelA = (abs(H_pe(k) - y(1) * exp(-1j*omegaf(k)*y(2)) * (y(4)^2/(y(4)^2 + 2*y(4)*y(3)*1j*omegaf(k) + (1j*omegaf(k))^2))));
 
+modelA = fvalA;

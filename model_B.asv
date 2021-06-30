@@ -23,14 +23,14 @@ for i = 1 : 1
 
     for m = 1 : 1
         H_pe = zeros(length(omegaf),1) ; 
-        %fun = @(x) 0 ;
+        fun = @(x) 0 ;
 
         Phase = phase_M_1;
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
-            g = @(x) sum(abs((H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))))^2);
-            %fun = @(x) fun(x) + g(x) ;
+            g = @(x) abs((H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))))^2;
+            fun = @(x) fun(x) + g(x) ;
             data_mag1(i,k) = Mag(k) ;
             data_phase1(i,k) = Phase(k) ;
         end
@@ -44,7 +44,7 @@ for i = 1 : 1
         %x0=[3.5,0.3,0.1,1,15];
         %x0 = [0,0,0,0,0];
         %[x,fval,exitflag,output] = fminsearch(g, x0, options);
-        [x,fvalB] = fminsearch(g,x0,options);
+        x = fminsearch(g,x0,options);
         %lb = [0, 0, 0, 0, 5];
         %ub = [100, 10, 10, 1, 30];
         %x = fmincon(fun,x0,[],[],[],[],lb,ub,[],options);
@@ -95,4 +95,3 @@ for i = 1 : 1
 end
 
 %modelB = (abs(H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))));
-modelB = fvalB;

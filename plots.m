@@ -7,6 +7,14 @@ ylabel('f_t')
 legend('f_t','excitation frequecy')
 grid on
 
+figure(2)
+
+loglog(omega,abs(fd_dft(1:N/2)),'k',omega(pklocsf),fd_pks,'ok')
+xlabel('\omega[rad/s]')
+ylabel('f_d')
+legend('f_d','excitation frequecy')
+grid on
+
 figure(3)
 
 loglog(omega,Sef(1:N/2),'k',omega(pklocs),Sef(pklocs),'ok')
@@ -46,12 +54,12 @@ plot(omega_test, data_magB(1,:),'--k')
  hold on
 loglog(omega_test, data_magC(1,:),'-.k')
 hold on
-loglog(omega_test, data_magD(1,:),':k')
+loglog(omega_test, data_magD(1,:),'-r')
 hold off
 axis(10.^[-.5 1.5 -1 2])
 xlabel("\omega [rad/s]")
 ylabel("|H_{p} (j \omega)| [-]")
-legend('Pilot FRF','Model A','Model B','Model C','Location','northwest')
+legend('Pilot FRF','Model A','Model B','Model C','Model D','Location','northwest')
 ah=gca; 
 set(ah,'Fontsize',12)
 
@@ -66,12 +74,12 @@ semilogx(omega_test, data_phaseB(1,:),'--k')
  hold on
 semilogx(omega_test, data_phaseC(1,:),'-.k')
 hold on
-semilogx(omega_test, data_phaseD(1,:),':k')
+semilogx(omega_test, data_phaseD(1,:),'-r')
 hold off
 axis([10.^-.5 10.^1.5 -300 200])
 xlabel("\omega [rad/s]")
 ylabel("\angle H_{p} (j \omega) [deg]")
-legend('Pilot FRF','Model A','Model B','Model C','Location','northeast')
+legend('Pilot FRF','Model A','Model B','Model C','Model D','Location','northeast')
 ah=gca; 
 set(ah,'Fontsize',12)
 grid on
