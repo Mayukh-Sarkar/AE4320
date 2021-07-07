@@ -1,3 +1,4 @@
+% cost for validation data set
 for i = 1 : 1
     phase_M_1 = phaseh ;
 
@@ -14,7 +15,7 @@ for i = 1 : 1
 
         Phase = phase_M_1;
         Mag = mag_M_1;
-    
+    %% cost function for the validation data set
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
             
@@ -46,6 +47,7 @@ for i = 1 : 1
         
     end
 end
+%% cost function values for all the models using validation data set
 modelAv = fvalAv;
 modelBv = fvalBv;
 modelCv = fvalCv;

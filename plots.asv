@@ -48,7 +48,7 @@ xlabel(' \omega[rad/s]')
 ylabel('\angle H_p(j \omega)')
 grid on
 
-%paramter estimation and fitting of models A,B and C
+%paramter estimation and fitting of models S,B 
 
 figure(6)
 set(gcf, 'Position', [100 100 700 650])
@@ -91,8 +91,6 @@ ah=gca;
 set(ah,'Fontsize',12)
 grid on
 
-%cpsd of e,u and ft using validation data set and comparing it to the cpsd
-%from identification data set
 figure(7)
 subplot(2,1,1)
 loglog(omega,Sef_v(1:N/2),'r',omega(pklocs),Sef_v(pklocs),'or')
@@ -113,8 +111,6 @@ xlabel('\omega[rad/s]')
 ylabel('|S_u_f_t(j \omega)|')
 grid on
 
-% calucation pilot dynamcis FRF using validation data set and comparing it
-% to the Hp of identification data set
 figure(8)
 subplot(2,1,1)
 loglog(omega(pklocs),magh,'ok')
@@ -139,7 +135,6 @@ ah=gca;
 set(ah,'Fontsize',12)
 grid on
 
-% fitting of model D and comparing it to B,C
 figure(9)
 set(gcf, 'Position', [100 100 700 650])
 subplot(2,1,1)

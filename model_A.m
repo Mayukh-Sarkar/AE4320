@@ -1,3 +1,4 @@
+%model A
 for i = 1 : 1
     phase_M_1 = phaseh ;
 

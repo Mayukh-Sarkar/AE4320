@@ -1,4 +1,4 @@
-%%%% Specify function for optimization
+%Model D
 
 omega_test = logspace(-0.5, 1.5, 100);
 

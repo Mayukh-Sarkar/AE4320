@@ -1,3 +1,5 @@
+%creating a table
+
 parameters = {'kp';'Tl';'Ti';'Tp';'zeta';'omega';'cost';'validation'};
 A = [y(1);0;0;y(2);y(3);y(4);modelA;modelAv];
 B = [x(1);x(2);0;x(3);x(4);x(5);modelB;modelBv];

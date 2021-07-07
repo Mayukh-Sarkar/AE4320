@@ -1,4 +1,4 @@
-%%%% Specify function for optimization
+%Model B
 
 omega_test = logspace(-0.4, 1.3, 100);
 
@@ -29,6 +29,7 @@ for i = 1 : 1
         Mag = mag_M_1;
         for k = 1 : length(omegaf)
             H_pe(k) = Mag(k) ;
+            %cost function OLS
             g = @(x) sum(abs((H_pe(k) - x(1)*(1 + x(2)*(1j*omegaf(k))) * exp(-1j*omegaf(k)*x(3)) * (x(5)^2/(x(5)^2 + 2*x(4)*x(5)*1j*omegaf(k) + (1j*omegaf(k))^2))))^2);
             %fun = @(x) fun(x) + g(x) ;
             data_mag1(i,k) = Mag(k) ;
