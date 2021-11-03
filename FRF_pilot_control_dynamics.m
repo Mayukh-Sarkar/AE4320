@@ -43,8 +43,8 @@ fd_dft = fft(fd,N);
 [ft_pks , pklocs] = findpeaks(abs(ft_dft(1:N/2)),"MinPeakHeight", 0.1);
 [fd_pks , pklocsf] = findpeaks(abs(fd_dft(1:N/2)),"MinPeakHeight", 0.1);
 
-Seft = conj(e_dft(1:N)).*ft_dft(1:N)/N; % cross power spectral density of error and ft
-Suft = conj(u_dft(1:N)).*ft_dft(1:N)/N; %cross power spectral density of input and ft
+Seft = (e_dft(1:N)).*ft_dft(1:N)/N; % cross power spectral density of error and ft
+Suft = (u_dft(1:N)).*ft_dft(1:N)/N; %cross power spectral density of input and ft
 Sef =  abs(Seft);
 Suf =  abs(Suft);
 
