@@ -54,7 +54,7 @@ Suf =  abs(Suft);
 omegaf = omega(pklocs)';
 Hp = Suft(pklocs)./Seft(pklocs); %pilot dynamics at excitation freq
 magh = abs(Hp); % magnitude of Hp
-phaseh = 180*angle(Hp)/pi; % phase of hp
+phaseh = rad2deg(unwrap(angle(Hp))); % phase of hp
 
 CF = max(abs(ft))/rms(ft);
 sprintf('The crest factor is %d',CF)
